@@ -1,0 +1,184 @@
+
+body {
+
+}
+
+#Designer {
+    margin: auto;
+    background-color: #ffffff;
+}
+
+#LoadingOverlay {
+    display: none;
+    position: relative;
+    z-index: 9999;
+    left: 0;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+#LoadingOverlayContent {
+    position: relative;
+    top: 45%;
+    width: 100%;
+    text-align: center;
+    margin-top: 30px;
+    color: #fff;
+}
+
+#DesignerArea {
+    border: black dashed 1px;
+    margin: 0;
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAGUlEQVQYV2NkwAIYCQk2MDAwgDADQZVwkwAypAEGY0WpAwAAAABJRU5ErkJggg==) repeat;
+    overflow: hidden;
+}
+
+#toprulersvg {
+    height: 30px;
+    top: -30px;
+    position: relative;
+    float: left;
+}
+#leftrulersvg{
+    width: 40px;
+    left: -40px;
+    top: -30px;
+    position: relative;
+    float: left;
+}
+
+#PrintableCanvas {
+    box-shadow: 0 0 11px 1px rgba(0, 0, 0, 0.75);
+}
+
+#SafeArea {
+    position: relative;
+    left: 0;
+    pointer-events: none;
+    border: grey dashed 2px;
+}
+
+#inputtext {
+    resize: none;
+    width: 358px;
+    height: 80px;
+    overflow: auto;
+    padding: 3px;
+    border-radius: 2px;
+    border: 1px solid silver;
+}
+
+.button-container {
+    width: 100%;
+    height: 87px;
+    background: gray;
+    overflow-y: scroll;
+    border: 1px solid darkgray;
+}
+
+.button-container > a {
+    width: 26px;
+    height: 26px;
+    float: left;
+    padding: 3px;
+    text-align: center;
+    line-height: 20px;
+    cursor: pointer;
+    color: #292929;
+    border-right: 1px solid #c8cbcc;
+    border-bottom: 1px solid #c8cbcc;
+    background-color: #fff;
+}
+
+.button-container > a:hover {
+    background-color: #bada55;
+    color: black;
+}
+
+.arrow-container {
+    width: 100%;
+    height: 100%;
+    background: gray;
+    /*border: 1px solid darkgray;*/
+}
+
+.arrow-container > a {
+    width: 36px;
+    height: 36px;
+    float: left;
+    padding: 3px;
+    text-align: center;
+    line-height: 30px;
+    font-size: x-large;
+    cursor: pointer;
+    color: #292929;
+    border: 1px solid #c8cbcc;
+    background-color: #fff;
+}
+
+.arrow-container > a:hover {
+    background-color: #bada55;
+    color: black;
+}
+
+*.unselectable {
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+
+    /*
+      Introduced in IE 10.
+      See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+    */
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#hsceditor li {
+    line-height: 30px;
+}
+
+.slidervaltable {
+    line-height: 30px;
+}
+
+#starpopcont svg, #rpolypopcont svg {
+    width: 210px;
+    height: 210px;
+    overflow: auto;
+}
+
+#starpopcont, #rpolypopcont {
+    border: 1px solid #aaa;
+    display: inline-block;
+    margin: 24px 0 0 24px;
+    min-width: 350px;
+}
+
+.toRightGradBtn {
+    padding: 20px;
+    margin: 5px;
+    cursor: pointer;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0)); /* Standard syntax (must be last) */
+}
+
+.toLeftGradBtn {
+    padding: 20px;
+    margin: 5px;
+    cursor: pointer;
+    background-image: linear-gradient(to left, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0)); /* Standard syntax (must be last) */
+}
+
+.toBottomGradBtn {
+    padding: 20px;
+    margin: 5px;
+    cursor: pointer;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0)); /* Standard syntax (must be last) */
+}
+
+.toTopGradBtn {
+    padding: 20px;
+    margin: 5px;
+    cursor: pointer;
+    background-image: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0)); /* Standard syntax (must be last) */
+}

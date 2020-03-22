@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Designer</title>
+
+    <link rel="stylesheet" href="css/w2ui-1.5.rc1.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/solid.css"
+          integrity="sha384-osqezT+30O6N/vsMqwW8Ch6wKlMofqueuia2H7fePy42uC05rm1G+BUPSd2iBSJL" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/fontawesome.css"
+          integrity="sha384-BzCy2fixOYd0HObpx3GMefNqdbA7Qjcc91RgYeDjrHTIEXqiF00jKvgQG0+zY/7I" crossorigin="anonymous">
+    <link rel="stylesheet" href="designer.css">
+    <script src="https://unpkg.com/tippy.js@3/dist/tippy.all.min.js"></script>
+    <link rel="stylesheet" href="css/tiptheme.css">
+    <link href='https://fonts.googleapis.com/css?family=Montez|Lobster|Josefin+Sans|Shadows+Into+Light|Pacifico|Amatic+SC:700|Orbitron:400,900|Rokkitt|Righteous|Dancing+Script:700|Bangers|Chewy|Sigmar+One|Architects+Daughter|Abril+Fatface|Covered+By+Your+Grace|Kaushan+Script|Gloria+Hallelujah|Satisfy|Lobster+Two:700|Comfortaa:700|Cinzel|Courgette'
+          rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/cropper.css">
+
+    <script src="libsjs/jquery-3.3.1.min.js"></script>
+    <script src="libsjs/w2ui-1.5.rc1.min.js"></script>
+    <script src="libsjs/fabric.js"></script>
+    <script src="libsjs/cropper.js"></script>
+    <script src="libsjs/qrcode.min.js"></script>
+    <script src="libsjs/download.js"></script>
+    <script src="https://unpkg.com/jspdf@latest/dist/jspdf.min.js"></script>
+    <script src="libsjs/aligning_guidelines.js"></script>
+    <script src="libsjs/centering_guidelines.js"></script>
+    <script src="libsjs/rulez.min.js"></script>
+
+</head>
+<body>
+
+<div id="Designer">
+    <div id="ToolsArea"></div>
+    <div id="DesignerArea">
+        <svg id="toprulersvg" xmlns="http://www.w3.org/2000/svg"></svg>
+        <svg id="leftrulersvg" xmlns="http://www.w3.org/2000/svg"></svg>
+        <canvas id="PrintableCanvas" width="680" height="398"></canvas>
+        <div id="SafeArea"></div>
+    </div>
+    <div id="TextPropertyArea" style="display: none"></div>
+    <div id="ImagePropertyArea" style="display: none"></div>
+    <div id="MorePropertyArea" style="display: none"></div>
+    <div id="StarPropertyArea" style="display: none"></div>
+    <div id="BGPropertyArea"></div>
+    <div id="Sides"></div>
+
+    <!-- Text Edit popup-->
+    <div id="texteditpopup" style="display: none; width: 400px; height: 300px; overflow: hidden">
+        <div rel="title">
+            Edit Text
+        </div>
+        <div rel="body" style="padding: 10px; line-height: 150%">
+            <div class="menu-container">
+                <div id="specialcharlist" class="button-container">
+                </div>
+            </div>
+            <textarea id="inputtext" oninput="updateTextValue(this.value)" onkeyup="checkForInputText(event)">
+                </textarea>
+        </div>
+        <div rel="buttons">
+            <button class="w2ui-btn" onclick="w2popup.close()">Close</button>
+        </div>
+    </div>
+    <!-- Image Crop popup-->
+    <div id="imagecroppopup" style="display: none; ">
+        <div rel="title">
+            Edit Image
+        </div>
+        <div rel="body" style="padding: 10px;height: 100%; width: 100%;">
+            <img id="croptarget" src="">
+        </div>
+        <div rel="buttons">
+            <button class="w2ui-btn" onclick="w2popup.close()">Close</button>
+        </div>
+    </div>
+    <!-- New Imge input from local file-->
+    <input id="localimageinput" type="file" style="display: none"/>
+    <!-- Replace Imge input from local file-->
+    <input id="replacelocalimageinput" type="file" style="display: none"/>
+    <!-- Change BG input from local file-->
+    <input id="changebgfromlocalinput" type="file" style="display: none"/>
+    <!-- Arrow popup-->
+    <div id="arrowpopup" style="display: none; width: 400px; height: 300px; overflow: hidden">
+        <div rel="title">
+            Select an Arrow
+        </div>
+        <div rel="body" style="padding: 10px; ">
+            <div class="menu-container">
+                <div id="arrowcharlist" class="arrow-container">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- QR popup-->
+    <div id="qrpopup" style="display: none; ">
+        <div rel="title">
+            Select an Arrow
+        </div>
+        <div rel="body" style="padding: 10px; ">
+            <div class="menu-container">
+                <input id="qrtext" type="text" value="https://sample.com" style="width:100%; margin: auto;"/>
+                <hr>
+                <div id="qrcode" style="margin: auto;"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Design Load input from local file-->
+    <input id="designfromlocalinput" type="file" style="display: none"/>
+
+    <!-- ----------  must be last element ------------ -->
+    <div id="LoadingOverlay">
+        <div id="LoadingOverlayContent">Please Wait ...</div>
+    </div>
+</div>
+
+</body>
+
+<script src="designerjs/buildcanvas.js"></script>
+<script src="designerjs/buildmaintools.js"></script>
+<script src="designerjs/buildpropertybar.js"></script>
+<script src="designerjs/buildsidetools.js"></script>
+
+<script>
+
+    var fonts = ["Montez", "Lobster", "Josefin Sans", "Shadows Into Light", "Pacifico", "Amatic SC", "Orbitron", "Rokkitt", "Righteous", "Dancing Script", "Bangers", "Chewy", "Sigmar One", "Architects Daughter", "Abril Fatface", "Covered By Your Grace", "Kaushan Script", "Gloria Hallelujah", "Satisfy", "Lobster Two", "Comfortaa", "Cinzel", "Courgette"];
+    var schlist = ['‚', 'ƒ', '„', '…', '†', '‡', 'ˆ', '‰', 'Š', '‹', 'Œ', '‘', '’', '“', '”', '•', '–', '—', '˜', '™', 'š', '›', 'œ', 'Ÿ', '¡', '¢', '£', '¤', '¥', '¦', '§', '¨', '©', 'ª', '«', '¬', '®', '¯', '°', '±', '²', '³', '´', '¶',
+        '·', '¸', '¹', 'º', '»', '¼', '½', '¾', '¿', 'À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Æ', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ð', 'Ñ', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', '×', 'Ø', 'Ù', 'Ú', 'Û', 'Ü', 'Ý', 'Þ', 'ß', 'à', 'á', 'â', 'ã', 'ä', 'å',
+        'æ', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ð', 'ñ', 'ò', 'ó', 'ô', 'õ', 'ö', '÷', 'ø', 'ù', 'ú', 'û', 'ü', 'ý', 'þ', 'ÿ', '€', '!', '"', '#', '$', '%', '&amp;', '\'', '(', ')', '*', '+', ',', '-', '.', '/', '&lt;', '&gt;', '?', '^', '_', '`', '~', '₩', ' '];
+
+    // the main canvas
+    let canvas = null;
+    let BGImage = null;
+    let imgcropper = null;
+    let qrcode = null;
+    window.enableShortKey = true;
+    let areConfig = {
+        width: 680,
+        height: 398,
+        safeAreaMargin: 24,
+        printableAreaMargin: 44,
+    };
+
+    $(function () {
+
+        buildcanvas();
+        buildtoolbar();
+        buildpropertybar();
+        buildsidebar();
+
+        // rilers
+        // top ruler
+        document.getElementById('toprulersvg').style.width = areConfig.width + 'px'; // bring up and over canvas
+        let toprulez = new Rulez({
+            element: document.getElementById('toprulersvg'),
+            divisions: [
+                {
+                    pixelGap: 5,
+                    lineLength: 5,
+                },
+                {
+                    pixelGap: 50,
+                    lineLength: 10,
+                },
+                {
+                    pixelGap: 100,
+                    lineLength: 20,
+                }
+            ],
+            texts: [
+                {
+                    pixelGap: 50
+                }
+            ]        });
+        toprulez.render();
+        // left ruler
+        document.getElementById('leftrulersvg').style.height = areConfig.height + 'px'; // bring up and over canvas
+        let leftrulez = new Rulez({
+            element: document.getElementById('leftrulersvg'),
+            layout: 'vertical',
+            textDefaults: {
+                rotation: 90
+            },
+            divisions: [
+                {
+                    pixelGap: 5,
+                    lineLength: 5,
+                },
+                {
+                    pixelGap: 50,
+                    lineLength: 10,
+                },
+                {
+                    pixelGap: 100,
+                    lineLength: 20,
+                }
+            ],
+            texts: [
+                {
+                    pixelGap: 50
+                }
+            ]
+        });
+        leftrulez.render();
+    });
+
+    $(document).ready(function () {
+        tippy('#DesignerArea', {
+            content: "Safety Line, <a id='safetylineinfo' href='http://www.google.com'>More info</a>",
+            distance: -(areConfig.printableAreaMargin + areConfig.safeAreaMargin) + 7,
+            interactive: true,
+            delay: 0,
+            arrow: true,
+            // arrowType: 'round',
+            size: 'small',
+            // hideOnClick: false,
+            showOnInit: true,
+            theme: "light-border",
+            trigger: 'mouseenter focus',
+            // trigger: 'manual',
+            // animation: 'scale'
+        });
+
+
+    });
+
+</script>
+</html>
